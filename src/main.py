@@ -1,5 +1,5 @@
 from src.power import power_function
-from src.constants import SAMPLE_CONSTANT, CHARS
+from src.constants import SAMPLE_CONSTANT
 from sys import stdin
 
 
@@ -48,7 +48,7 @@ def calc(line) -> None:
                 case _:
                     raise SyntaxError('Unknown operations')
             stack.append(res)
-    print(stack)
+    print(*stack if len(stack) == 1 else SyntaxError)
 
 def is_number(elem):
     """
@@ -59,8 +59,7 @@ def is_number(elem):
     Почему именно такая запись унарных символов (-3 +4 +)?
     1) проще (привычнее) для понимания как пользователю, так и программисту.
     2) благодаря такой записи можно проверять число через try float, что ускоряет процесс.
-    3) не на всех устройствах есть возможность вводить $ и унарный минус
-    (да. я не могу его ввести. у меня его нет на клавиатуре☺)
+    3) не на всех устройствах есть возможность вводить $ и ~
     """
     try:
         float(elem)
