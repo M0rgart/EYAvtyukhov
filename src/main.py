@@ -6,8 +6,20 @@ from sys import stdin
 def main() -> None:
     #Настроим непрерывный ввод строк, которые сразу преобразуем в списки
     for line in stdin:
-        line = line.split()
-        calc(line)
+        #проверка несчатсных скобок [:(]
+        check = 0
+        for i in line:
+            if i == '(':
+                check += 1
+            elif i == ')':
+                check -= 1
+            if check < 0:
+                print(SyntaxError)
+        if check != 0:
+            print(SyntaxError)
+        else:
+            line = line.replace('(', '').replace(')', '').split()
+            calc(line)
 
 def calc(line) -> None:
     #проведение рассчетов и вывод результата
@@ -17,17 +29,38 @@ def calc(line) -> None:
         #проверка каждого элемента строки(line)
         if is_number(elem):
             stack.append(float(elem))
-        elif elem in CHARS:
-            print(elem)
         else:
-            print(SyntaxError('Unknown character'))
+            match elem:
+                case '+':
+                    res = stack.pop() + stack.pop()
+                case '-':
+                    res = stack.pop() - stack.pop()
+                case '*':
+                    res = stack.pop() * stack.pop()
+                case '/':
+                    res = stack.pop() / stack.pop()
+                case '//':
+                    res = stack.pop() // stack.pop()
+                case '%':
+                    res = stack.pop() % stack.pop()
+                case '**':
+                    res = stack.pop() ** stack.pop()
+                case _:
+                    raise SyntaxError('Unknown operations')
+            stack.append(res)
     print(stack)
 
 def is_number(elem):
     """
     Проверяет, является ли строка числом (целым или дробным).
-    Такая запись способна обрабатывать унарные символы.
+    Такая запись способна обрабатывать унарные + и -.
     Вернет True, если строка является числом, False в противном случае.
+
+    Почему именно такая запись унарных символов (-3 +4 +)?
+    1) проще (привычнее) для понимания как пользователю, так и программисту.
+    2) благодаря такой записи можно проверять число через try float, что ускоряет процесс.
+    3) не на всех устройствах есть возможность вводить $ и унарный минус
+    (да. я не могу его ввести. у меня его нет на клавиатуре☺)
     """
     try:
         float(elem)
