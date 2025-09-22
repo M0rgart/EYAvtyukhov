@@ -30,34 +30,22 @@ def calc(line) -> None:
         if is_number(tok):
             stack.append(float(tok))
         else:
+            op1 = stack.pop()
+            op2 = stack.pop()
             match tok:
                 case '+':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 + op1
                 case '-':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 - op1
                 case '*':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 * op1
                 case '/':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 / op1
                 case '//':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 // op1
                 case '%':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 % op1
                 case '**':
-                    op1 = stack.pop()
-                    op2 = stack.pop()
                     res = op2 ** op1
                 case _:
                     raise SyntaxError('Unknown operations')
