@@ -25,32 +25,46 @@ def calc(line) -> None:
     #проведение рассчетов и вывод результата
     stack = []
     #создание стека, для хранения чисел
-    for elem in line:
+    for tok in line:
         #проверка каждого элемента строки(line)
-        if is_number(elem):
-            stack.append(float(elem))
+        if is_number(tok):
+            stack.append(float(tok))
         else:
-            match elem:
+            match tok:
                 case '+':
-                    res = stack.pop() + stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 + op1
                 case '-':
-                    res = stack.pop() - stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 - op1
                 case '*':
-                    res = stack.pop() * stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 * op1
                 case '/':
-                    res = stack.pop() / stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 / op1
                 case '//':
-                    res = stack.pop() // stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 // op1
                 case '%':
-                    res = stack.pop() % stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 % op1
                 case '**':
-                    res = stack.pop() ** stack.pop()
+                    op1 = stack.pop()
+                    op2 = stack.pop()
+                    res = op2 ** op1
                 case _:
                     raise SyntaxError('Unknown operations')
             stack.append(res)
     print(*stack if len(stack) == 1 else SyntaxError)
 
-def is_number(elem):
+def is_number(tok):
     """
     Проверяет, является ли строка числом (целым или дробным).
     Такая запись способна обрабатывать унарные + и -.
@@ -62,7 +76,7 @@ def is_number(elem):
     3) не на всех устройствах есть возможность вводить $ и ~
     """
     try:
-        float(elem)
+        float(tok)
         return True
     except ValueError:
         return False
