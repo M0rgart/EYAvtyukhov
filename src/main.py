@@ -4,7 +4,7 @@ from sys import stdin
 
 
 def main() -> None:
-    #Настроим непрерывный ввод строк, которые сразу преобразуем в списки
+    #Настроим непрерывный ввод строк
     for line in stdin:
         #проверка несчатсных скобок [:(]
         check = 0
@@ -14,11 +14,14 @@ def main() -> None:
             elif i == ')':
                 check -= 1
             if check < 0:
+                #Если в какой-то момент кода будет больше закрытых скобок, чем открытых
                 print(SyntaxError)
         if check != 0:
+            #Если остались незакрытые скобки
             print(SyntaxError)
         else:
             line = line.replace('(', '').replace(')', '').split()
+            #Избаввляемя от скобок, переводим строку в список, запускаем calc - функцию вычисления.
             calc(line)
 
 def calc(line) -> None:
@@ -28,8 +31,14 @@ def calc(line) -> None:
     for tok in line:
         #проверка каждого элемента строки(line)
         if is_number(tok):
+            # Если tok - число, кладпем его в стек
             stack.append(float(tok))
         else:
+            '''
+            Если tok - не число, то вытаскиваем два числа из стека.
+            Затем через match и case проверяем различные значения tok и производим операции с раннее
+            извлеченными числами. Если операции не определена, то выводится SyntaxError.
+            '''''
             op1 = stack.pop()
             op2 = stack.pop()
             match tok:
