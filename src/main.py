@@ -23,12 +23,14 @@ def main() -> None:
                 for char in BracketLine.split():
                     if is_number(char):
                         check += 1
-                    else:
+                    elif char in '+-**//%':
                         check -= 1
+                    else:
+                        exit('UnknownOperand')
                 if check == 0:
                     line = line[:lastOpen] + line[lastOpen+1:firtsClose] + line[firtsClose+1:]
                 else:
-                    exit(SyntaxError('InvalidSyntax'))
+                    exit('InvalidSyntax')
 
 
         line = line.split()
@@ -67,13 +69,13 @@ def calc(line) -> None:
                 case '**':
                     res = op2 ** op1
                 case _:
-                    exit(SyntaxError('Unknown operations'))
+                    exit('UnknownOperand')
             stack.append(res)
     print(*stack if len(stack) == 1 else SyntaxError)
 
 def is_number(tok):
     """
-    Проверяет, является ли строка числом (целым или дробным).
+    Проверяет, является ли строка числом (целым или дробны  м).
     Такая запись способна обрабатывать унарные + и -.
     Вернет True, если строка является числом, False в противном случае.
 
