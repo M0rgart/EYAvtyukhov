@@ -4,23 +4,35 @@ from sys import stdin
 def main() -> None:
     #Настроим непрерывный ввод строк
     for line in stdin:
-        #проверка несчатсных скобок [:(]
-        check = 0
-        for i in line:
-            if i == '(':
-                check += 1
-            elif i == ')':
-                check -= 1
-            if check < 0:
-                #Если в какой-то момент кода будет больше закрытых скобок, чем открытых
-                print(SyntaxError)
-        if check != 0:
-            #Если остались незакрытые скобки
-            print(SyntaxError)
-        else:
-            line = line.replace('(', '').replace(')', '').split()
-            #Избаввляемя от скобок, переводим строку в список, запускаем calc - функцию вычисления.
-            calc(line)
+        '''
+        Решаем проблесу скобок: создаем переменные lastOpen и firtsClose.
+        В первой находится id последней открывающей скобки, во второй id первой после нее закрывающей скобки.
+        Из-за особенности записи они 100 процентов будут связанны друг с другом.
+        При удалении данных скобок переменные обновятся и найдут еще одну пару. Это будет повторяться до тех пор, пока 
+        в строке не закончатся открывающие скобки. Остается проверить отсутствие закрывающих и работа со скобками окончена
+        Данный способ не является самым оптимальным, но позволяет решить проблему отдельно от остального кода.
+        '''
+        while True:
+            lastOpen = line.rfind('(')
+            firtsClose = line[lastOpen:].find(')') + lastOpen
+            if lastOpen == -1 or firtsClose == -1:
+                break
+            else:
+                BracketLine = line[lastOpen+1:firtsClose]
+                check = -1
+                for char in BracketLine.split():
+                    if is_number(char):
+                        check += 1
+                    else:
+                        check -= 1
+                if check == 0:
+                    line = line[:lastOpen] + line[lastOpen+1:firtsClose] + line[firtsClose+1:]
+                else:
+                    exit(SyntaxError('InvalidSyntax'))
+
+
+        line = line.split()
+        calc(line)
 
 def calc(line) -> None:
     #проведение рассчетов и вывод результата
@@ -55,7 +67,7 @@ def calc(line) -> None:
                 case '**':
                     res = op2 ** op1
                 case _:
-                    raise SyntaxError('Unknown operations')
+                    exit(SyntaxError('Unknown operations'))
             stack.append(res)
     print(*stack if len(stack) == 1 else SyntaxError)
 
