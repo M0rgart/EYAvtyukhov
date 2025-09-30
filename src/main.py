@@ -1,7 +1,7 @@
 from sys import stdin
 
 
-def main() -> None:
+def run() -> None:
     #Настроим непрерывный ввод строк
     for line in stdin:
         '''
@@ -101,4 +101,4 @@ def is_number(tok):
         return False
 
 if __name__ == "__main__":
-    main()
+    run()
