@@ -61,10 +61,20 @@ def calc(line) -> None:
                 case '*':
                     res = op2 * op1
                 case '/':
+                    if op1 == 0:
+                        exit('ZeroDivisionError')
                     res = op2 / op1
                 case '//':
+                    if op1 == 0:
+                        exit('ZeroDivisionError')
+                    if int(op2) != float(op2):
+                        exit('RealNumberDivisionError')
                     res = op2 // op1
                 case '%':
+                    if op1 == 0:
+                        exit('ZeroDivisionError')
+                    if int(op2) != float(op2):
+                        exit('RealNumberDivisionError')
                     res = op2 % op1
                 case '**':
                     res = op2 ** op1
