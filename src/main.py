@@ -37,7 +37,7 @@ def run(line) -> None:
                 exit('InvalidSyntax')
 
     line = line.split()
-    calc(line)
+    print(calc(line))
 
 
 def calc(line) -> None:
@@ -53,10 +53,13 @@ def calc(line) -> None:
             '''
             Если tok - не число, то вытаскиваем два числа из стека.
             Затем через match и case проверяем различные значения tok и производим операции с раннее
-            извлеченными числами. Если операции не определена, то выводится SyntaxError.
+            извлеченными числами. Если операции не определена, то выводится UnknownOperand.
             '''''
-            op1 = stack.pop()
-            op2 = stack.pop()
+            if len(stack) < 2:
+                exit('SyntaxError')
+            else:
+                op1 = stack.pop()
+                op2 = stack.pop()
             match tok:
                 case '+':
                     res = op2 + op1
@@ -85,7 +88,10 @@ def calc(line) -> None:
                 case _:
                     exit('UnknownOperand')
             stack.append(res)
-    print(*stack if len(stack) == 1 else SyntaxError)
+    if len(stack) == 1:
+        return stack[0]
+    else:
+        exit('SyntaxError')
 
 
 def is_number(tok):
