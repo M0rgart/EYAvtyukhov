@@ -1,47 +1,51 @@
 from sys import stdin
 
 
-def run() -> None:
-    #Настроим непрерывный ввод строк
+def main() -> None:
     for line in stdin:
-        '''
-        Решаем проблесу скобок: создаем переменные lastOpen и firtsClose.
-        В первой находится id последней открывающей скобки, во второй id первой после нее закрывающей скобки.
-        Из-за особенности записи они 100 процентов будут связанны друг с другом.
-        При удалении данных скобок переменные обновятся и найдут еще одну пару. Это будет повторяться до тех пор, пока 
-        в строке не закончатся открывающие скобки. Остается проверить отсутствие закрывающих и работа со скобками окончена
-        Данный способ не является самым оптимальным, но позволяет решить проблему отдельно от остального кода.
-        '''
-        while True:
-            lastOpen = line.rfind('(')
-            firtsClose = line[lastOpen:].find(')') + lastOpen
-            if lastOpen == -1 or firtsClose == -1:
-                break
-            else:
-                BracketLine = line[lastOpen+1:firtsClose]
-                check = -1
-                for char in BracketLine.split():
-                    if is_number(char):
-                        check += 1
-                    elif char in '+-**//%':
-                        check -= 1
-                    else:
-                        exit('UnknownOperand')
-                if check == 0:
-                    line = line[:lastOpen] + line[lastOpen+1:firtsClose] + line[firtsClose+1:]
+        run(line)
+
+
+def run(line) -> None:
+    # Настроим непрерывный ввод строк
+    '''
+    Решаем проблесу скобок: создаем переменные lastOpen и firtsClose.
+    В первой находится id последней открывающей скобки, во второй id первой после нее закрывающей скобки.
+    Из-за особенности записи они 100 процентов будут связанны друг с другом.
+    При удалении данных скобок переменные обновятся и найдут еще одну пару. Это будет повторяться до тех пор, пока
+    в строке не закончатся открывающие скобки. Остается проверить отсутствие закрывающих и работа со скобками окончена
+    Данный способ не является самым оптимальным, но позволяет решить проблему отдельно от остального кода.
+    '''
+    while True:
+        lastOpen = line.rfind('(')
+        firtsClose = line[lastOpen:].find(')') + lastOpen
+        if lastOpen == -1 or firtsClose == -1:
+            break
+        else:
+            BracketLine = line[lastOpen + 1:firtsClose]
+            check = -1
+            for char in BracketLine.split():
+                if is_number(char):
+                    check += 1
+                elif char in '+-**//%':
+                    check -= 1
                 else:
-                    exit('InvalidSyntax')
+                    exit('UnknownOperand')
+            if check == 0:
+                line = line[:lastOpen] + line[lastOpen + 1:firtsClose] + line[firtsClose + 1:]
+            else:
+                exit('InvalidSyntax')
 
+    line = line.split()
+    calc(line)
 
-        line = line.split()
-        calc(line)
 
 def calc(line) -> None:
-    #проведение рассчетов и вывод результата
+    # проведение рассчетов и вывод результата
     stack = []
-    #создание стека, для хранения чисел
+    # создание стека, для хранения чисел
     for tok in line:
-        #проверка каждого элемента строки(line)
+        # проверка каждого элемента строки(line)
         if is_number(tok):
             # Если tok - число, кладпем его в стек
             stack.append(float(tok))
@@ -83,6 +87,7 @@ def calc(line) -> None:
             stack.append(res)
     print(*stack if len(stack) == 1 else SyntaxError)
 
+
 def is_number(tok):
     """
     Проверяет, является ли строка числом (целым или дробны  м).
@@ -100,5 +105,6 @@ def is_number(tok):
     except ValueError:
         return False
 
+
 if __name__ == "__main__":
-    run()
+    main()
