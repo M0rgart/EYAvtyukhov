@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 import sys
-from src.main import calc, run  # Замените 'main' на имя вашего файла
+from src.main import calc, run
 
 
 class TestCalculator(unittest.TestCase):
